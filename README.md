@@ -4,4 +4,4 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 I'm using this stack to quickly start working on a new frontend application.
 
-### Todo - update readme :)
+### Todo - update readme :), TS and tests setup
