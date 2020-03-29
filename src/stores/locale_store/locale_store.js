@@ -1,4 +1,4 @@
-import { types, getEnv } from 'mobx-state-tree'
+import { types, getEnv, getRoot } from 'mobx-state-tree'
 import { includes } from 'lodash'
 
 const PL = 'pl'
@@ -17,6 +17,9 @@ const LocaleStore = types
       get availableLocales() {
         return AVAILABLE_LOCALES
       },
+      get isDefaultLocale() {
+        return self.locale === AVAILABLE_LOCALES[0]
+      },
       get isPolishLocale() {
         return self.locale === PL
       },
@@ -26,7 +29,7 @@ const LocaleStore = types
     }
   })
   .actions(self => {
-    const { i18n } = getEnv(self)
+    const { i18n, history } = getEnv(self)
 
     return {
       afterCreate() {
@@ -43,6 +46,12 @@ const LocaleStore = types
       setLocale(value) {
         self.locale = value
         i18n.changeLanguage(value)
+      },
+      toggleLocale() {
+        const { translatePathname } = getRoot(self).routesStore
+        const newLocale = self.isPolishLocale ? EN : PL
+
+        history.push(translatePathname(history.location.pathname, newLocale))
       }
     }
   })

@@ -5,12 +5,16 @@ const useStore = () => {
   return useContext(StoreContext)
 }
 
-const useFilterStore = () => {
-  return useContext(StoreContext).filterStore
+const useLocaleStore = () => {
+  return useContext(StoreContext).localeStore
 }
 
 const useRoutesStore = () => {
   return useContext(StoreContext).routesStore
 }
 
-export { useStore, useFilterStore, useRoutesStore }
+const useExamplesStore = () => {
+  return useContext(StoreContext).examplesStore
+}
+
+export { useStore, useLocaleStore, useRoutesStore, useExamplesStore }

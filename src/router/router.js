@@ -1,32 +1,40 @@
 import React, { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { Route } from 'react-router'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import DesktopLayout from './layouts/desktop/desktop'
 import TabletLayout from './layouts/tablet/tablet'
 import MobileLayout from './layouts/mobile/mobile'
-import { useMediaQueryBreakpoints } from 'components/media_query/media_query'
+import { useMediaQueryBreakpoints } from 'hooks/media_query'
 import ScrollToTop from './scroll_to_top/scroll_to_top'
-import { useFilterStore } from 'hooks/stores'
+import { useLocaleStore, useRoutesStore } from 'hooks/stores'
 
 const Router = observer(() => {
   const { isMobile, isTablet } = useMediaQueryBreakpoints()
   const { locale } = useParams()
-  let history = useHistory()
   const {
     setLocale,
     availableLocales,
-    locale: filterStoreLocale
-  } = useFilterStore()
+    isDefaultLocale,
+    locale: localeStoreLocale
+  } = useLocaleStore()
+  const { redirectToRoot } = useRoutesStore()
 
   useEffect(() => {
     if (locale && availableLocales.includes(locale)) {
       setLocale(locale)
+      isDefaultLocale && redirectToRoot()
     } else {
       setLocale(availableLocales[0])
-      if (availableLocales[0] === 'en') history.push('/en')
     }
-  }, [locale, availableLocales, setLocale, history])
+  }, [
+    locale,
+    availableLocales,
+    setLocale,
+    localeStoreLocale,
+    isDefaultLocale,
+    redirectToRoot
+  ])
 
   if (isMobile) {
     return <MobileLayout />

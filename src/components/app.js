@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: proxima-nova;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: ${colors.black};
+    background-color: ${colors.white};
   }
 `
 
