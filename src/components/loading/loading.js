@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const StyledCircularProgress = styled(CircularProgress)`
   && {
-    color: ${props => props.theme.colors.black};
+    color: ${(props) => props.theme.colors.black};
   }
 `
 
@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  ${props =>
+  ${(props) =>
     props.fitScreen
       ? `
     height: 80vh;
@@ -23,14 +23,9 @@ const Wrapper = styled.div`
   `}
 `
 
-const Loading = ({
-  size = 45,
-  thickness = 4,
-  fitScreen = false,
-  fitAspectRatio = false
-}) => {
+const Loading = ({ size = 45, thickness = 4, fitScreen = false }) => {
   return (
-    <Wrapper fitScreen={fitScreen} fitAspectRatio={fitAspectRatio}>
+    <Wrapper fitScreen={fitScreen}>
       <StyledCircularProgress size={size} thickness={thickness} />
     </Wrapper>
   )
