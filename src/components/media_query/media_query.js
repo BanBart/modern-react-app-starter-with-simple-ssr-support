@@ -34,34 +34,31 @@ const Responsive = ({
   TabletOrBelowWrapper,
   children,
   ...props
-}) => (
-  <React.Fragment>
-    {DesktopWrapper && (
-      <Desktop>
-        <DesktopWrapper {...props}>{children}</DesktopWrapper>
-      </Desktop>
-    )}
-    {TabletWrapper && (
-      <Tablet>
-        <TabletWrapper {...props}>{children}</TabletWrapper>
-      </Tablet>
-    )}
-    {MobileWrapper && (
-      <Mobile>
-        <MobileWrapper {...props}>{children}</MobileWrapper>
-      </Mobile>
-    )}
-    {TabletOrAboveWrapper && (
-      <TabletOrAbove>
-        <TabletOrAboveWrapper {...props}>{children}</TabletOrAboveWrapper>
-      </TabletOrAbove>
-    )}
-    {TabletOrBelowWrapper && (
-      <TabletOrBelow>
-        <TabletOrBelowWrapper {...props}>{children}</TabletOrBelowWrapper>
-      </TabletOrBelow>
-    )}
-  </React.Fragment>
-)
+}) => {
+  const {
+    isDesktop,
+    isTablet,
+    isTabletOrAbove,
+    isTabletOrBelow,
+    isMobile,
+  } = useMediaQueryBreakpoints()
+
+  if (DesktopWrapper && isDesktop)
+    return <DesktopWrapper {...props}>{children}</DesktopWrapper>
+
+  if (TabletWrapper && isTablet)
+    return <TabletWrapper {...props}>{children}</TabletWrapper>
+
+  if (MobileWrapper && isMobile)
+    return <MobileWrapper {...props}>{children}</MobileWrapper>
+
+  if (TabletOrAboveWrapper && isTabletOrAbove)
+    return <TabletOrAboveWrapper {...props}>{children}</TabletOrAboveWrapper>
+
+  if (TabletOrBelowWrapper && isTabletOrBelow)
+    return <TabletOrBelowWrapper {...props}>{children}</TabletOrBelowWrapper>
+
+  return null
+}
 
 export { Desktop, Tablet, TabletOrAbove, TabletOrBelow, Mobile, Responsive }
