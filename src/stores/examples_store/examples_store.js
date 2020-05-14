@@ -13,9 +13,9 @@ const ExampleStore = types
       types.enumeration([INITIAL, LOADING, LOADED, NOT_FOUND_ERROR]),
       INITIAL
     ),
-    examples: types.optional(types.map(Example), {})
+    examples: types.optional(types.map(Example), {}),
   })
-  .views(self => {
+  .views((self) => {
     return {
       get isLoaded() {
         return self.state === LOADED
@@ -31,10 +31,10 @@ const ExampleStore = types
       },
       getExampleById(id) {
         return self.examples.get(id)
-      }
+      },
     }
   })
-  .actions(self => {
+  .actions((self) => {
     const { apiClient } = getEnv(self)
 
     return {
@@ -53,25 +53,27 @@ const ExampleStore = types
         yield apiClient.requestManager(
           async () =>
             await apiClient.get(`${ENDPOINT_API_PATH}`, {
-              locale
+              locale,
             }),
-          response => {
-            response.data.forEach(self.addExample)
-            self.endLoading()
-          },
-          () => self.setNotFoundError()
+          {
+            onSuccessCallback: (response) => {
+              response.data.forEach(self.addExample)
+              self.endLoading()
+            },
+            onNotFoundCallback: () => self.setNotFoundError(),
+          }
         )
       }),
       addExample({ id, name }) {
         self.examples.set(id, {
           id,
-          name
+          name,
         })
       },
       reset() {
         self.state = INITIAL
         self.examples.clear()
-      }
+      },
     }
   })
 

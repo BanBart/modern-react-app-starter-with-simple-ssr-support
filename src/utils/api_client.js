@@ -2,10 +2,11 @@ import defaultAxios from 'axios'
 import qs from 'qs'
 
 const NOT_FOUND = '404'
+const FORBIDDEN = '403'
 
 class ApiClient {
   errors = {
-    NOT_FOUND: { type: NOT_FOUND }
+    NOT_FOUND: { type: NOT_FOUND },
   }
 
   constructor({ apiToken, apiUrl, headers = {} }) {
@@ -13,19 +14,25 @@ class ApiClient {
     this.apiToken = apiToken
     this.headers = headers
     this.settings = {
-      paramsSerializer: params =>
+      paramsSerializer: (params) =>
         qs.stringify(params, { arrayFormat: 'brackets' }),
-      baseURL: apiUrl
+      baseURL: apiUrl,
     }
   }
 
-  async requestManager(request, onSuccessCallback, onNotFoundCallback) {
+  async requestManager(
+    request,
+    { onSuccessCallback, onNotFoundCallback, onForbiddenCallback }
+  ) {
     try {
       const response = await request()
-      onSuccessCallback(response)
+      onSuccessCallback && onSuccessCallback(response)
+      return response
     } catch (e) {
-      if (e.type === NOT_FOUND) {
+      if (e.type === NOT_FOUND && onNotFoundCallback) {
         onNotFoundCallback()
+      } else if (e.type === FORBIDDEN && onForbiddenCallback) {
+        onForbiddenCallback()
       } else {
         throw e
       }
@@ -80,7 +87,7 @@ class ApiClient {
       payload = {},
       headers = {},
       responseType = 'json',
-      params
+      params,
     } = request
 
     Object.assign(headers, this.headers)
@@ -95,13 +102,15 @@ class ApiClient {
         responseType,
         url: endpoint,
         data: payload,
-        ...this.settings
+        ...this.settings,
       })
 
       return response.data
     } catch (error) {
       if (error.response && error.response.status === 404) {
         throw this.errors.NOT_FOUND
+      } else if (error.response && error.response.status === 403) {
+        throw this.errors.FORBIDDEN
       } else {
         throw error
       }

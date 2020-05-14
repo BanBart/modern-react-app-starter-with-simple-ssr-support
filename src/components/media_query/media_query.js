@@ -1,4 +1,5 @@
 import React from 'react'
+import { compact } from 'lodash'
 import { useMediaQueryBreakpoints } from 'hooks/media_query'
 
 const Desktop = ({ children }) => {
@@ -42,6 +43,18 @@ const Responsive = ({
     isTabletOrBelow,
     isMobile,
   } = useMediaQueryBreakpoints()
+
+  // react-responsive bug with shrinking from smaller size to bigger, on first render it returns truthy values for smaller and bigger wrapper.
+  if (
+    compact([
+      TabletOrAboveWrapper && isTabletOrAbove,
+      TabletOrBelowWrapper && isTabletOrBelow,
+      DesktopWrapper && isDesktop,
+      MobileWrapper && isMobile,
+      TabletWrapper && isTablet,
+    ]).length > 1
+  )
+    return null
 
   if (DesktopWrapper && isDesktop)
     return <DesktopWrapper {...props}>{children}</DesktopWrapper>
