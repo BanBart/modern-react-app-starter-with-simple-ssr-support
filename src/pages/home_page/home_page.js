@@ -5,7 +5,7 @@ import Example from 'components/example/example'
 import { Helmet } from 'react-helmet'
 
 const HomePage = () => {
-  // const { fetch, reset, isLoaded } = useExamplesStore()
+  // const { fetch, reset, loadingState: { isLoaded }} = useExamplesStore()
   // const { locale } = useLocaleStore
 
   // useEffect(() => {
