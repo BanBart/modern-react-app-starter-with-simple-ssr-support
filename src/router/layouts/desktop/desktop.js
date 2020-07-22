@@ -25,6 +25,9 @@ const LayoutTemplate = () => {
           <Route exact path={routesStore.root}>
             <Pages.HomePage />
           </Route>
+          <Route exact path={routesStore.tableBenchmarkPage}>
+            <Pages.TableBenchmarkPage />
+          </Route>
         </Switch>
         {background && (
           <Route path={routesStore.orderPage}>
