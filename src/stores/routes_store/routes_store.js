@@ -2,7 +2,7 @@ import { types, getRoot, getEnv } from 'mobx-state-tree'
 
 const RoutesStore = types
   .model('RoutesStore', {})
-  .views(self => {
+  .views((self) => {
     return {
       i18nRoutes(path) {
         const { locale, isDefaultLocale } = getRoot(self).localeStore
@@ -10,21 +10,26 @@ const RoutesStore = types
       },
       translatePathname(pathname, locale) {
         return {
-          pl: pathname.replace(/^(\/en)/, ''),
-          en: `/en${pathname}`
+          pl: pathname
+            .replace(/^(\/en)/, '')
+            .replace('/table-benchmark', '/table-benchmark'),
+          en: `/en${pathname.replace('/table-benchmark', '/table-benchmark')}`,
         }[locale]
       },
       get root() {
         return self.i18nRoutes('/')
-      }
+      },
+      get tableBenchmarkPage() {
+        return self.i18nRoutes('/table-benchmark')
+      },
     }
   })
-  .actions(self => {
+  .actions((self) => {
     const { history } = getEnv(self)
     return {
       redirectToRoot() {
         history.push(self.root)
-      }
+      },
     }
   })
 

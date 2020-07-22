@@ -3,15 +3,17 @@ import styled from 'styled-components'
 import { Grid, useScrollTrigger, AppBar, Toolbar } from '@material-ui/core'
 import { Responsive } from 'components/media_query/media_query'
 import LocaleSwitchButton from '../shared/locale_switch_button'
+import { Link } from 'react-router-dom'
+import { useRoutesStore } from 'hooks/stores'
 
 const Wrapper = styled.div`
   padding: 0 96px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: ${props => (props.trigger ? 64 : 96)}px;
+  height: ${(props) => (props.trigger ? 64 : 96)}px;
   transition: height 0.3s;
-  border-bottom: 1px solid ${props => props.theme.colors.black};
+  border-bottom: 1px solid ${(props) => props.theme.colors.black};
 `
 
 const TabletWrapper = styled(Wrapper)`
@@ -33,15 +35,17 @@ const StyledToolbar = styled(Toolbar)`
 
 function ElevationScroll({ children, trigger }) {
   return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0
+    elevation: trigger ? 4 : 0,
   })
 }
 
 const DefaultNavbar = () => {
   const trigger = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 12
+    threshold: 12,
   })
+
+  const routesStore = useRoutesStore()
 
   return (
     <ElevationScroll trigger={trigger}>
@@ -55,6 +59,7 @@ const DefaultNavbar = () => {
                 trigger={trigger}
               >
                 <LocaleSwitchButton />
+                <Link to={routesStore.tableBenchmarkPage}>Table Benchmark</Link>
               </Responsive>
             </Grid>
           </Grid>
