@@ -17,4 +17,14 @@ const useExamplesStore = () => {
   return useContext(StoreContext).examplesStore
 }
 
-export { useStore, useLocaleStore, useRoutesStore, useExamplesStore }
+const useCharactersStore = () => {
+  return useContext(StoreContext).charactersStore
+}
+
+export {
+  useStore,
+  useLocaleStore,
+  useRoutesStore,
+  useExamplesStore,
+  useCharactersStore,
+}
