@@ -22,8 +22,11 @@ const LayoutTemplate = () => {
     <StyledContainer container>
       <Grid item lg={12}>
         <Switch location={background || location}>
-          <Route exact path={routesStore.root}>
+          <Route exact path="/">
             <Pages.HomePage />
+          </Route>
+          <Route exact path="/characters">
+            <Pages.CharactersPage />
           </Route>
         </Switch>
         {background && (
